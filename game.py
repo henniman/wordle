@@ -33,6 +33,7 @@ def handle_key(event):
                 print("true")
             else:
                 print("false")
+                var_input = ""
             print(correct_word)
         elif key == "BackSpace":
             var_input = var_input[:-1]
