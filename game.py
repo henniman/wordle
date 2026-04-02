@@ -7,8 +7,6 @@ def handle_key(event):
     global var_input 
     global level_length
 
-    game_style.buildLevel(level_length)
-
     if len(var_input) < level_length or (key == "BackSpace" or key == "Return"):
         if key == "Return":
             if check_input(var_input): 
@@ -33,8 +31,6 @@ def check_input(user_input):
         return True
     else:
         return False
-
-game_style.styleApp()
 
 var_input = ""
 level_length = 3

@@ -1,10 +1,10 @@
 import customtkinter as ctk
-
+import pygame as pg
 
 app = ctk.CTk()
 app.title("Wörtre")
 
-def styleApp():
+def buildStart():
     ctk.set_default_color_theme("dark-blue")
     ctk.set_appearance_mode("system") 
     titelLabel = ctk.CTkLabel(app, text="WÖRTRE", fg_color="transparent", text_color="white", width=200, height=50, corner_radius=8, font=("Arial", 20, "bold"))
