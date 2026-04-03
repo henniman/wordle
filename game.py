@@ -1,55 +1,59 @@
+import pygame as pg
 import random as rnd
-import game_style
+import word_lists
 
-def handle_key(event):
-    # event.keysym enthält den Namen der Taste (z.B. 'a', 'Return', 'BackSpace')
-    key = event.keysym
-    global var_input 
-    global level_length
+pg.init()
 
-    if len(var_input) < level_length or (key == "BackSpace" or key == "Return"):
-        if key == "Return":
-            if check_input(var_input): 
+WIDTH, HEIGHT = 640, 640
+screen = pg.display.set_mode((WIDTH, HEIGHT))
+pg.display.set_caption("Wörtre")
+font = pg.font.Font("Grand9K Pixel.ttf", 20)
+
+var_input = ""
+level_length = 3
+correct_word = rnd.choice(word_lists.three_word_list_german)
+
+running = True
+clock = pg.time.Clock() # Set the desired frames per second (FPS) for the game loop
+
+def check_input(user_input): 
+    return user_input == correct_word
+
+def valid_input(event):
+    global var_input
+
+    if event.key == pg.K_RETURN:
+        if var_input in word_lists.three_word_list_german:
+            print("Word exists in the list.")
+
+            if check_input(var_input):
                 print("true")
             else:
                 print("false")
                 var_input = ""
-            print(correct_word)
-        elif key == "BackSpace":
-            var_input = var_input[:-1]
-            print(var_input)
-        elif len(key) == 1 and key.isalpha(): # ist Alphanumerisch?
-            var_input = var_input + key
-            print(var_input)
+
+        else:
+            print("Word does not exist in the list.")
+
+        print(correct_word)
+
+    elif event.key == pg.K_BACKSPACE:
+        var_input = var_input[:-1]
+
     else:
-        print("max länge erreicht")
-        print(var_input)
+        char = event.unicode
+        if char.isalpha() and len(var_input) < level_length:
+            var_input += char.upper()
 
-def check_input(user_input):
-    global correct_word
-    if user_input.upper() == correct_word:
-        return True
-    else:
-        return False
+while running:
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            running = False
 
-var_input = ""
-level_length = 3
+        elif event.type == pg.KEYDOWN: 
+            valid_input(event)
 
-word_list = [
-    "AAL", "ABO", "AKT", "ALM", "AMT", "ART", "AST", "AUF", "AUS", "BAD", 
-    "BAU", "BEI", "BIT", "BOX", "BUH", "EHE", "EIS", "ELF", "ERZ", "FAN", 
-    "FAX", "FEE", "GEL", "GEN", "GUT", "HAI", "HOF", "HUT", "ICH", "IHM", 
-    "IHN", "IHR", "INN", "IST", "JOB", "KAI", "KID", "KUR", "LAB", "LOB", 
-    "LOG", "LOS", "MAI", "MAL", "MAU", "MET", "MIX", "MUT", "NAH", "NEU", 
-    "NIE", "NOT", "NUN", "OFT", "OHR", "OST", "RAD", "RAT", "RAU", "REH", 
-    "ROH", "ROT", "RUF", "SAU", "SEE", "SET", "SIE", "SKI", "SOL", "TAG", 
-    "TAT", "TEE", "TOD", "TON", "TOR", "TOT", "TUN", "UHR", "UND", "UNS", 
-    "UWE", "VON", "VOR", "WAL", "WAS", "WEG", "WEM", "WEN", "WER", "WIE", 
-    "WIR", "WUT", "ZUG"]
+    pg.display.flip() 
+    clock.tick(60)
 
-correct_word = rnd.choice(word_list)
-
-# Bindet alle Tastendruck-Events an die Funktion
-game_style.app.bind("<Key>", handle_key)
-
-game_style.app.mainloop()
+pg.quit()
