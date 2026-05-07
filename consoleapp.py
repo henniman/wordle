@@ -38,25 +38,42 @@ def game_level(language_p, level_p):
 
     while word != guess and tries > 0:
         if language_p == "en":
-            print(f"Guess the word! You have {tries} tries left.")
+            print(f"Guess the word with {level_p + 2} letters! You have {tries} tries left.")
         else:
-            print(f"Errate das Wort! Du hast noch {tries} Versuche.")
+            print(f"Errate das Wort mit {level_p + 2} Buchstaben! Du hast noch {tries} Versuche.")
 
         guess = input().upper()
         if guess != word:
             tries -= 1
-            if language_p == "en":
-                print("Wrong guess. Try again.")
-            else:
-                print("Falsch. Versuche es erneut.")
+            #hier kommt dann buchstabekontrolle
         else:
             points = points + (5 * tries) + (len(word) * 10) #beim ersten Versuch 6*5 oder 5*5? ein versuch weniger oder nicht?
             if language_p == "en":
                 print("Congratulations! You've guessed the word!\nYour Score: " + str(points))
             else:
                 print("Glückwunsch! Du hast das Wort erraten!\nDein Score: " + str(points))
+            return True
+    if word != guess and tries == 0:
+        if language_p == "en":
+            print(f"Game Over! The word was: {word}\nYour Score: {points}")
+        else:
+            print(f"Spiel vorbei! Das Wort war: {word}\nDein Score: {points}")
+    return False
 
 while True:     
     choice = main()
     if choice == "1":
-        game_level(language, level)
+        while game_level(language, level):
+            if level + 2 > 7:
+                if language == "en":
+                    print("Congratulations! You've completed all levels!\nDo you want to continue playing? (y/n)")
+                else:
+                    print("Glückwunsch! Du hast alle Level abgeschlossen!\nMöchtest du weiter spielen? (y/n)")
+                choice = input().lower()
+                if choice == "n":
+                    print("Thanks for playing! Goodbye!") if language == "en" else print("Danke fürs Spielen! Auf Wiedersehen!")
+                    break
+                elif choice == "y":
+                    level = 5
+            level += 1
+        
